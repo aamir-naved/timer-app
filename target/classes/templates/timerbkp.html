@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer App</title>
+</head>
+<body>
+<h1>Timer App</h1>
+<p id="timer">5000:00:00</p>
+<button onclick="startTimer()">Start</button>
+<button onclick="stopTimer()">Stop</button>
+
+<script>
+    var timerInterval;
+    var totalSeconds = 5000 * 60 * 60;
+
+    function startTimer() {
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
+    function updateTimer() {
+        var hours = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+
+        document.getElementById("timer").innerHTML = formatTime(hours) + ":" + formatTime(minutes) + ":" + formatTime(seconds);
+
+        if (totalSeconds === 0) {
+            stopTimer();
+        } else {
+            totalSeconds--;
+        }
+    }
+
+    function formatTime(time) {
+        return time < 10 ? "0" + time : time;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer App</title>
+    <style>
+        body {
+            background-color: #282c34; /* Light dark background color */
+            color: #61dafb; /* Text color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #timer {
+            font-size: 3em; /* Very big size */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #61dafb; /* Button background color */
+            color: #282c34; /* Button text color */
+            font-size: 1.5em;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a1db; /* Button background color on hover */
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1 style="text-align: center;">Timer App</h1>
+    <div id="timer">5000:00:00</div>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="stopTimer()">Stop</button>
+    <button onclick="resetTimer()">Reset</button>
+</div>
+
+
+<!--<script>-->
+<!--    var timerInterval;-->
+<!--    var totalSeconds = 5000 * 60 * 60;-->
+
+<!--    function startTimer() {-->
+<!--        timerInterval = setInterval(updateTimer, 1000);-->
+<!--    }-->
+
+<!--    function stopTimer() {-->
+<!--        clearInterval(timerInterval);-->
+<!--    }-->
+
+<!--    function updateTimer() {-->
+<!--        var hours = Math.floor(totalSeconds / 3600);-->
+<!--        var minutes = Math.floor((totalSeconds % 3600) / 60);-->
+<!--        var seconds = totalSeconds % 60;-->
+
+<!--        document.getElementById("timer").innerHTML = formatTime(hours) + ":" + formatTime(minutes) + ":" + formatTime(seconds);-->
+
+<!--        if (totalSeconds === 0) {-->
+<!--            stopTimer();-->
+<!--        } else {-->
+<!--            totalSeconds&#45;&#45;;-->
+<!--        }-->
+<!--    }-->
+
+<!--    function formatTime(time) {-->
+<!--        return time < 10 ? "0" + time : time;-->
+<!--    }-->
+<!--</script>-->
+
+<script>
+    var timerInterval;
+    var totalSeconds;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // Retrieve the timer state from localStorage
+        var savedTotalSeconds = localStorage.getItem('totalSeconds');
+        if (savedTotalSeconds !== null) {
+            totalSeconds = parseInt(savedTotalSeconds, 10);
+            updateTimerDisplay();
+        } else {
+            totalSeconds = 5000 * 60 * 60;
+        }
+
+        // Start the timer
+        startTimer();
+
+        // Record the timer state every 15 seconds
+        setInterval(recordTimerState, 15000);
+    });
+
+    function startTimer() {
+        timerInterval = setInterval(function() {
+            updateTimer();
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+        updateTimerDisplay();
+        // Save the timer state to localStorage
+        localStorage.setItem('totalSeconds', totalSeconds.toString());
+    }
+
+    function resetTimer() {
+        clearInterval(timerInterval);
+        totalSeconds = 5000 * 60 * 60;
+        updateTimerDisplay();
+        // Save the timer state to localStorage
+        localStorage.setItem('totalSeconds', totalSeconds.toString());
+    }
+
+    function recordTimerState() {
+        // Save the timer state to localStorage
+        localStorage.setItem('totalSeconds', totalSeconds.toString());
+    }
+
+    function updateTimer() {
+        if (totalSeconds > 0) {
+            totalSeconds--;
+        } else {
+            stopTimer();
+        }
+    }
+
+    function updateTimerDisplay() {
+        var hours = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+
+        document.getElementById("timer").innerHTML = formatTime(hours) + ":" + formatTime(minutes) + ":" + formatTime(seconds);
+    }
+
+    function formatTime(time) {
+        return time < 10 ? "0" + time : time;
+    }
+</script>
+</body>
+</html>
